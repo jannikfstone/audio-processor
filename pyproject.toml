@@ -1,5 +1,5 @@
 [project]
-name = "audio-processing"
+name = "audioprocessing"
 version = "0.1.0"
 description = ""
 authors = [{name = "Jannik Falkenstein", email = "<audio-processor@falkenstein.tech>"}]
