@@ -1,5 +1,8 @@
 [project]
-audio-processing = "0.1.0"
+name = "audio-processing"
+version = "0.1.0"
+description = ""
+authors = ["Jannik Falkenstein <audio-processor@falkenstein.tech>"]
 
 [tool.poetry]
 name = "audio-processing"
