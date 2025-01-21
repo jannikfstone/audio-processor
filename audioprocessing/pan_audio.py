@@ -30,8 +30,6 @@ def pan_audio(input_file, output_file, plot_speaker):
 
     current_timestamp = 0
     for left_section, right_section in zip(left_sections, right_sections):
-        if current_timestamp > 30:
-            break
         timestamp_series.append(current_timestamp)
         current_timestamp += section_length / 1000
         speaker = get_speaker(left_section, right_section, loudness_difference)
