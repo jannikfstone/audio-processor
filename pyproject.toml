@@ -1,8 +1,11 @@
+[project]
+audio-processing = "0.1.0"
+
 [tool.poetry]
 name = "audio-processing"
 version = "0.1.0"
 description = ""
-authors = ["Your Name <you@example.com>"]
+authors = ["Jannik Falkenstein <audio-processor@falkenstein.tech>"]
 readme = "README.md"
 
 [tool.poetry.scripts]
