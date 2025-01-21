@@ -12,7 +12,7 @@ authors = ["Jannik Falkenstein <audio-processor@falkenstein.tech>"]
 readme = "README.md"
 
 [tool.poetry.scripts]
-pan_audio = "audioprocessing.pan_audio:pan_audio"
+pan_audio = "audio-processing.pan_audio:pan_audio"
 
 [tool.poetry.dependencies]
 python = "^3.12"
