@@ -5,14 +5,14 @@ description = ""
 authors = [{name = "Jannik Falkenstein", email = "<audio-processor@falkenstein.tech>"}]
 
 [tool.poetry]
-name = "audio-processing"
+name = "audioprocessing"
 version = "0.1.0"
 description = ""
 authors = ["Jannik Falkenstein <audio-processor@falkenstein.tech>"]
 readme = "README.md"
 
 [tool.poetry.scripts]
-pan_audio = "audio-processing.pan_audio:pan_audio"
+pan_audio = "audioprocessing.pan_audio:pan_audio"
 
 [tool.poetry.dependencies]
 python = "^3.12"
