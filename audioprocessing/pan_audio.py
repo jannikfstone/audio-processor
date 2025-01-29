@@ -1,10 +1,8 @@
 from pydub import AudioSegment
-import matplotlib.pyplot as plt
 import click
 import os
 import time
 import datetime
-import concurrent.futures
 import threading
 
 loudness_difference = 1
@@ -27,17 +25,7 @@ def pan_audio(input_file, output_file, plot_speaker):
         return
 
     recording = get_audio_segment(input_file)
-    chunked_recording = get_chunked_audio(recording)
-    panned_chunks = [None] * (num_threads + 1)
-    pool = concurrent.futures.ThreadPoolExecutor(max_workers=num_threads + 1)
-
-    for chunk_index, chunk in enumerate(chunked_recording):
-        pool.submit(pan_audio_chunk, chunk, chunk_index, panned_chunks)
-
-    pool.shutdown(wait=True)
-    final_audio = AudioSegment.empty()
-    for chunk in panned_chunks:
-        final_audio += chunk
+    final_audio = pan_audio_recursive(recording)
     print("Chunks panned. Exporting to ", output_file)
     print("Length of final audio: ", datetime.timedelta(seconds=(len(final_audio) / 1000)))
 
@@ -46,8 +34,19 @@ def pan_audio(input_file, output_file, plot_speaker):
     time_counter.join()
     print("Total processing time: ", int(time.time() - start_time) , " seconds")
 
+def pan_audio_recursive(source_audio: AudioSegment):
+    segment_length = len(source_audio)
+    if segment_length < section_length:
+        return pan_audio_chunk(source_audio)
 
-def pan_audio_chunk(audio: AudioSegment, chunk_index: int, panned_chunks: list[AudioSegment]):
+    half_length = segment_length // 2
+
+    t1_target = pan_audio_recursive(source_audio[:half_length])
+    t2_target = pan_audio_recursive(source_audio[half_length:])
+
+    return t1_target + t2_target
+
+def pan_audio_chunk(audio: AudioSegment):
     left, right = audio.split_to_mono()
     left_sections = left[::section_length]
     right_sections = right[::section_length]
@@ -62,9 +61,9 @@ def pan_audio_chunk(audio: AudioSegment, chunk_index: int, panned_chunks: list[A
         panned_right += panned_right_section
 
     final_chunk_audio = AudioSegment.from_mono_audiosegments(panned_left, panned_right)
-    print("Chunk ", chunk_index, " panned")
-    print ("Length of chunk: ", datetime.timedelta(seconds=(len(final_chunk_audio) / 1000)))
-    panned_chunks[chunk_index] = final_chunk_audio
+    # print ("Length of chunk: ", datetime.timedelta(seconds=(len(final_chunk_audio) / 1000)))
+    return final_chunk_audio
+    # panned_chunks[chunk_index] = final_chunk_audio
 
 def get_panned_audio(left_audio: AudioSegment, right_audio: AudioSegment, speaker: str) -> tuple[AudioSegment, AudioSegment]:
     if speaker == 'left':
